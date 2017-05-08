@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+	xmlns:p="http://www.springframework.org/schema/p"  
+	xmlns:context="http://www.springframework.org/schema/context"   
+	xmlns:tx="http://www.springframework.org/schema/tx"  
+	xmlns:aop="http://www.springframework.org/schema/aop"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+	http://www.springframework.org/schema/beans/spring-beans.xsd    
+	http://www.springframework.org/schema/aop    
+	http://www.springframework.org/schema/aop/spring-aop.xsd    
+	http://www.springframework.org/schema/tx    
+	http://www.springframework.org/schema/tx/spring-tx.xsd    
+	http://www.springframework.org/schema/context    
+	http://www.springframework.org/schema/context/spring-context.xsd"
+	>
+	
+	<!-- 1. 引入外部配置文件 -->
+	<context:property-placeholder location="classpath:mail.properties"/>
+	
+	<!-- 2. 配置用于发送简单邮件的bean -->
+	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+		<!-- 邮件发送者 -->
+		<property name="from" value="${mail.from}" />
+	</bean>
+	
+	<!-- 2. 配置发送邮件实现类 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 配置相关属性 -->
+		<property name="host" value="${mail.smtp.host}" />
+		<property name="username" value="${mail.user}" />
+		<property name="password" value="${mail.pwd}" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="javaMailProperties">
+			<props>
+				<!-- 配置认证开关- -->
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<!-- 启动调试开关 -->
+				<prop key="mail.debug">true</prop>
+				<!-- 配置发送延迟: 0表示永不延迟 -->
+				<prop key="mail.smtp.timeout">0</prop>
+			</props>
+		</property>
+	</bean>
+    
+</beans>
